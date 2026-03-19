@@ -32,6 +32,9 @@ const globalStyle = StyleSheet.create({
     userStoryConatiner : {
        marginTop: 20,
        marginHorizontal:20 
+    },
+    userPostContainer:{
+        marginHorizontal:24,
     }
 })
 
