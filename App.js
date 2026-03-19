@@ -126,7 +126,7 @@ const App = () => {
   const [isLoadingUserStories, setIsLoadingUserStories] = useState(false);
 
 
-  const userPostPageSize = 4;
+  const userPostPageSize = 2;
   const [userPostCurrentPage, setUserPostCurrentPage] = useState(1);
   const [userPostRenderData, setUserPostRenderData] = useState([]);
   const [isLoadingUserPost, setIsLoadingUserPost] = useState(false);
@@ -147,6 +147,11 @@ const App = () => {
     const getInitialData = pagination(userStories, 1, userStoriesPageSize);
     setUserStoriesRenderData(getInitialData);
     setIsLoadingUserStories(false);
+
+    setIsLoadingUserPost(true);
+    const getInitialDataPosts = pagination(userPost, 1, userPostPageSize);
+    setUserPostRenderData(getInitialDataPosts);
+    setIsLoadingUserPost(false);
   }, []);
 
 
@@ -194,7 +199,20 @@ const App = () => {
                 </View>
               </>
             }
-            data={userPost}
+            onEndReachedThreshold={0.5}
+            onEndReached={() => {
+                      if (isLoadingUserPost ) {
+                        return;
+                      }
+                      setIsLoadingUserPost(true);
+                      const contentToAppend = pagination(userPost, userPostCurrentPage + 1, userPostPageSize)
+                      if (contentToAppend.length > 0) {
+                        setUserPostCurrentPage(userPostCurrentPage + 1);
+                        setUserPostRenderData(prev => [...prev, ...contentToAppend])
+                      }
+                      setIsLoadingUserPost(false);
+                    }}
+            data={userPostRenderData}
             showsVerticalScrollIndicator={false}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
