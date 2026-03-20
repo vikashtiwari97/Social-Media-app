@@ -4,7 +4,7 @@ import {
   SafeAreaView
 } from 'react-native-safe-area-context';
 import Title from './src/component/Title/Title'
-import { View, TouchableOpacity, Text, FlatList } from 'react-native';
+import { View, TouchableOpacity, Text, FlatList , Dimensions } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import globalStyle from './src/assets/Styles/globalStyles';
@@ -131,6 +131,8 @@ const App = () => {
   const [userPostRenderData, setUserPostRenderData] = useState([]);
   const [isLoadingUserPost, setIsLoadingUserPost] = useState(false);
 
+  const [screenData , setScreenData] = useState(Dimensions.get('screen'));
+  console.log(screenData);
   const pagination = (database, currentPage, pageSize) => {
     const startIndex = (currentPage - 1) * pageSize;
     const endIndex = startIndex + pageSize;
@@ -152,8 +154,12 @@ const App = () => {
     const getInitialDataPosts = pagination(userPost, 1, userPostPageSize);
     setUserPostRenderData(getInitialDataPosts);
     setIsLoadingUserPost(false);
-  }, []);
 
+    Dimensions.addEventListener('change', (result)=>{
+      setScreenData(result.screen)
+    })
+  }, []);
+ 
 
 
 
